@@ -1,0 +1,14 @@
+<div class="message-box">
+    <div class="row">
+      <h3 class="subject" [ngStyle]="{'color': message.score >= 6 ? '#9335ff' : '#e89d40'}">{{ message.subject }}</h3>
+      <p class="team">{{ message.team }}</p>
+    </div>
+  
+    <div class="row">
+      <p class="question">{{ message.question }}</p>
+      <p class="created-at">{{ message.created_at }}</p>
+    </div>
+  
+    <h4 class="text-entry">{{ message.text }}</h4>
+  </div>
+  
