@@ -1,30 +1,49 @@
-<div class="container">
-    <div class="thread-wrapper"
-         *ngFor="let message of threadData; let i = index; trackBy: trackByFn"
-         [style.z-index]="threadData.length - i"
-         [style.transform]="'translate(' + (i * 5) + 'px, ' + (i * 5) + 'px)'"
-         (click)="expandThread(message, i)">
-        <div class="thread-box card">
-            <div class="row">
-                <h3 class="subject"
-                    [ngStyle]="{'color': message.score >= 6 ? '#9335ff' : '#e89d40'}">{{ message.subject }}</h3>
-                <p class="team">{{ message.team }}</p>
-                <div *ngIf="message.messages && message.messages.length > 2" class="messages-indicator">
-                  {{message.messages.length}} messages
+    <div class="container">
+        <div class="thread-wrapper single-thread" *ngIf="isSingleThread">
+            <div class="thread-wrapper">
+                <div class="thread-box card">
+                    <div class="row">
+                        <h3 class="subject" 
+                        [ngStyle]="{'color': threadData[0].score >= 6 ? '#9335ff' : '#e89d40'}">{{ threadData[0].subject }}</h3>
+                        <p class="team">{{ threadData[0].team }}</p>
+                    </div>
+
+                    <div class="row">
+                        <p class="question">{{ threadData[0].question }}</p>
+                        <p class="created-at">{{ threadData[0].created_at }}</p>
+                    </div>
+                    
+                    <h4 class="text-entry">{{ threadData[0].text }}</h4>
                 </div>
             </div>
-
-            <div class="row">
-                <p class="question">{{ message.question }}</p>
-                <p class="created-at">{{ message.created_at }}</p>
-            </div>
-
-            <h4 class="text-entry">{{ message.text }}</h4>
-            
-            <div *ngIf="totalMessages > 2" class="total-messages" 
-                [ngStyle]="{'background-color': totalMessages > 6 ? '#21aae1' : '#e89d40'}">
-                {{totalMessages}} messages
-           </div>
         </div>
+        <div class="thread-wrapper multiple-threads" *ngIf="!isSingleThread">
+            <div *ngFor="let thread of threadToShow; let i = index">
+                <div class="thread-box card" 
+                [ngClass]="{'normal-view': i === 0 || !thread.showDetails, 'compressed': getCardClass(i, thread)}"
+                [ngStyle]="{transform: getTransformStyle(i, thread), zIndex: getZIndex(i, thread)}"
+                (click)="toggleShowDetails(thread)">
+                    
+                    <div class="row">
+                        <h3 class="subject"
+                        [ngStyle]="{'color': thread.score >= 6 ? '#9335ff' : '#e89d40'}">{{ thread.subject }}</h3>
+                        <p class="team">{{ thread.team }}</p>
+                    </div>
+        
+                    <div class="row">
+                        <p class="question">{{ thread.question }}</p>
+                        <p class="created-at">{{ thread.created_at }}</p>
+                    </div>
+                    
+                    <h4 class="text-entry">{{ thread.text }}</h4>
+                    
+                    <div *ngIf="totalMessages >= 2 && showTotalMessages" class="total-messages" 
+                        [ngStyle]="{'background-color': thread.score >= 6 ? '#21aae1' : '#e89d40'}">
+                        {{totalMessages}} messages
+                    </div>                
+        
+                </div>
+            </div>
+        </div>
+        
     </div>
-</div>
